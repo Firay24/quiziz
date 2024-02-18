@@ -1,3 +1,4 @@
+import shuffleArray from "@/util/shuffleArray";
 import {
   Button,
   HStack,
@@ -9,14 +10,24 @@ import {
 import { FaQuestionCircle } from "react-icons/fa";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { RiTimeFill } from "react-icons/ri";
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrent } from "../questionSlice";
 
-const Quiz = () => {
+const Quiz = ({ question }: { question: any }) => {
+  const dispatch = useDispatch();
+  const current = useSelector((state: any) => state.questions.current);
+  const answers =
+    question &&
+    question.incorrect_answers &&
+    question.correct_answer &&
+    shuffleArray([...question.incorrect_answers, question.correct_answer]);
+
   return (
     <Stack paddingX={20} width="70%">
       {/* head */}
       <HStack>
         <Text fontWeight="semibold" color="gray.400">
-          Questions 1
+          {`Question ${current + 1}`}
         </Text>
         <Spacer />
         <HStack gap={5}>
@@ -29,7 +40,7 @@ const Quiz = () => {
             >
               <FaQuestionCircle />
             </Stack>
-            <Text color="gray.400">1/5 Questions</Text>
+            <Text color="gray.400">{`${current + 1}/5 Questions`}</Text>
           </HStack>
           <HStack>
             <Stack
@@ -48,46 +59,51 @@ const Quiz = () => {
       {/* body */}
       <Stack marginTop={5}>
         <Text fontSize="2xl" fontWeight="medium">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum ...
+          {question && question.question}
         </Text>
 
         <Stack marginTop={5} gap={5}>
-          {Array.from({ length: 4 }, (_, index) => (
-            <Stack
-              key={index}
-              paddingY={2}
-              paddingX={5}
-              border="1px"
-              borderColor="gray.200"
-              rounded="xl"
-              backgroundColor="white"
-              cursor="pointer"
-              _hover={{
-                backgroundColor: "blue.50",
-                fontWeight: "semibold",
-              }}
-            >
-              <Text>Makanan bergizi</Text>
-            </Stack>
-          ))}
+          {answers &&
+            answers.length > 0 &&
+            answers.map((answer: string, index: number) => (
+              <Stack
+                key={index}
+                paddingY={2}
+                paddingX={5}
+                border="1px"
+                borderColor="gray.200"
+                rounded="xl"
+                backgroundColor="white"
+                cursor="pointer"
+                _hover={{
+                  backgroundColor: "blue.50",
+                  fontWeight: "semibold",
+                }}
+              >
+                <Text>{answer}</Text>
+              </Stack>
+            ))}
         </Stack>
 
         <HStack marginTop={5}>
           <HStack>
             <IconButton
+              isDisabled={current === 0}
               colorScheme="blue"
               rounded="full"
               size="sm"
               aria-label="Search database"
               icon={<IoIosArrowBack />}
+              onClick={() => current !== 0 && dispatch(setCurrent(current - 1))}
             />
             <IconButton
+              isDisabled={current === 4}
               colorScheme="blue"
               rounded="full"
               size="sm"
               aria-label="Search database"
               icon={<IoIosArrowForward />}
+              onClick={() => current !== 4 && dispatch(setCurrent(current + 1))}
             />
           </HStack>
           <Spacer />

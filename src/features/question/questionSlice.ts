@@ -13,6 +13,7 @@ export const fetchQuestion = createAsyncThunk("question/fetch", async () => {
 
   const dataWithId = data.results.map((result: any) => ({
     id: shortId.generate(),
+    user_answer: "",
     ...result,
   }));
   return dataWithId;
@@ -24,8 +25,16 @@ const questionAdapter = createEntityAdapter({
 
 const questionSlice = createSlice({
   name: "question",
-  initialState: questionAdapter.getInitialState({ loading: false }),
-  reducers: {},
+  initialState: questionAdapter.getInitialState({ loading: false, current: 0 }),
+  reducers: {
+    updateUserAnswer: (state, action) => {
+      const { id, user_answer } = action.payload;
+      questionAdapter.updateOne(state, { id, changes: { user_answer } });
+    },
+    setCurrent: (state, action) => {
+      state.current = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchQuestion.pending, (state) => {
@@ -42,7 +51,9 @@ const questionSlice = createSlice({
 });
 
 export const questionsSelectors = questionAdapter.getSelectors(
-  (state: any) => state.comments
+  (state: any) => state.questions
 );
+
+export const { updateUserAnswer, setCurrent } = questionSlice.actions;
 
 export default questionSlice.reducer;

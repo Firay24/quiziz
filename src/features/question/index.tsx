@@ -1,21 +1,31 @@
 import { Image, Stack } from "@chakra-ui/react";
 
 import Navbar from "./components/navbar";
-import PreQuiziz from "./components/pre";
+// import PreQuiziz from "./components/pre";
 import Quiz from "./components/quiz";
-import Result from "./components/result";
+// import Result from "./components/result";
 
 import BgImg from "@/assets/bg.png";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { fetchQuestion } from "./questionSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { fetchQuestion, questionsSelectors } from "./questionSlice";
 
 const Questions = () => {
   const dispatch = useDispatch();
+  const allQuestions = useSelector(questionsSelectors.selectAll);
+  const [question, setQuestion] = useState([]);
+
+  const current = useSelector((state: any) => state.questions.current);
 
   useEffect(() => {
     dispatch(fetchQuestion());
   }, []);
+
+  useEffect(() => {
+    if (allQuestions && allQuestions.length > 0) {
+      setQuestion(allQuestions[current]);
+    }
+  }, [current, allQuestions]);
 
   return (
     <Stack>
@@ -37,7 +47,7 @@ const Questions = () => {
         {/* body section */}
         <Stack alignItems="center">
           {/* <PreQuiziz /> */}
-          <Quiz />
+          <Quiz question={question && question} />
           {/* <Result /> */}
         </Stack>
       </Stack>
