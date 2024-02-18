@@ -1,3 +1,4 @@
+import shuffleArray from "@/util/shuffleArray";
 import {
   createAsyncThunk,
   createEntityAdapter,
@@ -14,9 +15,13 @@ export const fetchQuestion = createAsyncThunk("question/fetch", async () => {
   const dataWithId = data.results.map((result: any) => ({
     id: shortId.generate(),
     user_answer: "",
-    all_answer: [],
+    all_answer: shuffleArray([
+      ...result.incorrect_answers,
+      result.correct_answer,
+    ]),
     ...result,
   }));
+  localStorage.setItem("questions", JSON.stringify(dataWithId));
   return dataWithId;
 });
 
@@ -31,6 +36,7 @@ const questionSlice = createSlice({
     updateUserAnswer: (state, action) => {
       const { id, user_answer } = action.payload;
       questionAdapter.updateOne(state, { id, changes: { user_answer } });
+      localStorage.setItem("questions", JSON.stringify(state.entities));
     },
     updateAllAnswer: (state, action) => {
       const { id, all_answer } = action.payload;
@@ -39,6 +45,7 @@ const questionSlice = createSlice({
     setCurrent: (state, action) => {
       state.current = action.payload;
     },
+    setAllQuestions: questionAdapter.setAll,
   },
   extraReducers: (builder) => {
     builder
@@ -59,7 +66,11 @@ export const questionsSelectors = questionAdapter.getSelectors(
   (state: any) => state.questions
 );
 
-export const { updateUserAnswer, setCurrent, updateAllAnswer } =
-  questionSlice.actions;
+export const {
+  updateUserAnswer,
+  setCurrent,
+  updateAllAnswer,
+  setAllQuestions,
+} = questionSlice.actions;
 
 export default questionSlice.reducer;

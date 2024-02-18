@@ -11,27 +11,11 @@ import { FaQuestionCircle } from "react-icons/fa";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { RiTimeFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setCurrent,
-  updateAllAnswer,
-  updateUserAnswer,
-} from "../questionSlice";
-import { useEffect } from "react";
+import { setCurrent, updateUserAnswer } from "../questionSlice";
 
 const Quiz = ({ question }: { question: any }) => {
   const dispatch = useDispatch();
   const current = useSelector((state: any) => state.questions.current);
-  const answers =
-    question &&
-    question.incorrect_answers &&
-    question.correct_answer &&
-    shuffleArray([...question.incorrect_answers, question.correct_answer]);
-
-  useEffect(() => {
-    if (question && question.all_answer && question.all_answer.length === 0) {
-      dispatch(updateAllAnswer({ id: question.id, all_answer: answers }));
-    }
-  }, [question]);
 
   return (
     <Stack paddingX={20} width="70%">
@@ -62,7 +46,7 @@ const Quiz = ({ question }: { question: any }) => {
             >
               <RiTimeFill />
             </Stack>
-            <Text color="gray.400">00"00 Min</Text>
+            <Text color="gray.400">00:00 Min</Text>
           </HStack>
         </HStack>
       </HStack>

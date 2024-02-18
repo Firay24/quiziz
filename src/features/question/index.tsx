@@ -8,21 +8,43 @@ import Quiz from "./components/quiz";
 import BgImg from "@/assets/bg.png";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { fetchQuestion, questionsSelectors } from "./questionSlice";
+import {
+  fetchQuestion,
+  questionsSelectors,
+  setAllQuestions,
+} from "./questionSlice";
 
 const Questions = () => {
   const dispatch = useDispatch();
-  const allQuestions = useSelector(questionsSelectors.selectAll);
   const [question, setQuestion] = useState([]);
+  const allQuestions = useSelector(questionsSelectors.selectAll);
 
   const current = useSelector((state: any) => state.questions.current);
 
   useEffect(() => {
-    dispatch(fetchQuestion());
+    if (!localStorage.getItem("isSubmit")) {
+      dispatch(fetchQuestion());
+      localStorage.setItem("isSubmit", "false");
+    }
+    if (localStorage.getItem("questions")) {
+      dispatch(setAllQuestions(JSON.parse(localStorage.getItem("questions"))));
+    }
   }, []);
 
   useEffect(() => {
-    if (allQuestions && allQuestions.length > 0) {
+    if (localStorage.getItem("isSubmit") === "true") {
+      dispatch(fetchQuestion());
+    }
+  }, [localStorage.getItem("isSubmit")]);
+
+  useEffect(() => {
+    if (localStorage.getItem("questions")) {
+      dispatch(setAllQuestions(JSON.parse(localStorage.getItem("questions"))));
+    }
+  }, [localStorage.getItem("questions")]);
+
+  useEffect(() => {
+    if (allQuestions) {
       setQuestion(allQuestions[current]);
     }
   }, [current, allQuestions]);
