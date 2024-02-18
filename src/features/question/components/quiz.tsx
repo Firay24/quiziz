@@ -11,7 +11,12 @@ import { FaQuestionCircle } from "react-icons/fa";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { RiTimeFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import { setCurrent } from "../questionSlice";
+import {
+  setCurrent,
+  updateAllAnswer,
+  updateUserAnswer,
+} from "../questionSlice";
+import { useEffect } from "react";
 
 const Quiz = ({ question }: { question: any }) => {
   const dispatch = useDispatch();
@@ -21,6 +26,12 @@ const Quiz = ({ question }: { question: any }) => {
     question.incorrect_answers &&
     question.correct_answer &&
     shuffleArray([...question.incorrect_answers, question.correct_answer]);
+
+  useEffect(() => {
+    if (question && question.all_answer && question.all_answer.length === 0) {
+      dispatch(updateAllAnswer({ id: question.id, all_answer: answers }));
+    }
+  }, [question]);
 
   return (
     <Stack paddingX={20} width="70%">
@@ -58,33 +69,56 @@ const Quiz = ({ question }: { question: any }) => {
 
       {/* body */}
       <Stack marginTop={5}>
-        <Text fontSize="2xl" fontWeight="medium">
-          {question && question.question}
-        </Text>
+        <Stack minHeight="55vh">
+          <Text fontSize="2xl" fontWeight="medium">
+            {question && question.question}
+          </Text>
 
-        <Stack marginTop={5} gap={5}>
-          {answers &&
-            answers.length > 0 &&
-            answers.map((answer: string, index: number) => (
-              <Stack
-                key={index}
-                paddingY={2}
-                paddingX={5}
-                border="1px"
-                borderColor="gray.200"
-                rounded="xl"
-                backgroundColor="white"
-                cursor="pointer"
-                _hover={{
-                  backgroundColor: "blue.50",
-                  fontWeight: "semibold",
-                }}
-              >
-                <Text>{answer}</Text>
-              </Stack>
-            ))}
+          <Stack marginTop={5} gap={5}>
+            {question &&
+              question.all_answer &&
+              question.all_answer.length > 0 &&
+              question.all_answer.map((answer: string, index: number) => (
+                <Stack
+                  key={index}
+                  paddingY={2}
+                  paddingX={5}
+                  border="1px"
+                  borderColor="gray.200"
+                  rounded="xl"
+                  fontWeight={
+                    question && question.user_answer === answer
+                      ? "semibold"
+                      : "normal"
+                  }
+                  backgroundColor={
+                    question && question.user_answer === answer
+                      ? "blue.50"
+                      : "white"
+                  }
+                  cursor="pointer"
+                  _hover={{
+                    backgroundColor: "blue.50",
+                    fontWeight: "semibold",
+                  }}
+                  onClick={() => {
+                    question &&
+                      dispatch(
+                        updateUserAnswer({
+                          id: question.id,
+                          user_answer: answer,
+                        })
+                      );
+                    current !== 4 && dispatch(setCurrent(current + 1));
+                  }}
+                >
+                  <Text>{answer}</Text>
+                </Stack>
+              ))}
+          </Stack>
         </Stack>
 
+        {/* buttons */}
         <HStack marginTop={5}>
           <HStack>
             <IconButton

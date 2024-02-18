@@ -14,6 +14,7 @@ export const fetchQuestion = createAsyncThunk("question/fetch", async () => {
   const dataWithId = data.results.map((result: any) => ({
     id: shortId.generate(),
     user_answer: "",
+    all_answer: [],
     ...result,
   }));
   return dataWithId;
@@ -30,6 +31,10 @@ const questionSlice = createSlice({
     updateUserAnswer: (state, action) => {
       const { id, user_answer } = action.payload;
       questionAdapter.updateOne(state, { id, changes: { user_answer } });
+    },
+    updateAllAnswer: (state, action) => {
+      const { id, all_answer } = action.payload;
+      questionAdapter.updateOne(state, { id, changes: { all_answer } });
     },
     setCurrent: (state, action) => {
       state.current = action.payload;
@@ -54,6 +59,7 @@ export const questionsSelectors = questionAdapter.getSelectors(
   (state: any) => state.questions
 );
 
-export const { updateUserAnswer, setCurrent } = questionSlice.actions;
+export const { updateUserAnswer, setCurrent, updateAllAnswer } =
+  questionSlice.actions;
 
 export default questionSlice.reducer;
