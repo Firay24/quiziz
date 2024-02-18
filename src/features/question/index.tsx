@@ -6,8 +6,17 @@ import Quiz from "./components/quiz";
 import Result from "./components/result";
 
 import BgImg from "@/assets/bg.png";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { fetchQuestion } from "./questionSlice";
 
 const Questions = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchQuestion());
+  }, []);
+
   return (
     <Stack>
       {/* background image */}
@@ -28,8 +37,8 @@ const Questions = () => {
         {/* body section */}
         <Stack alignItems="center">
           {/* <PreQuiziz /> */}
-          {/* <Quiz /> */}
-          <Result />
+          <Quiz />
+          {/* <Result /> */}
         </Stack>
       </Stack>
     </Stack>
