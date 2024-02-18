@@ -11,11 +11,15 @@ import {
 } from "@chakra-ui/react";
 import { forwardRef, useRef } from "react";
 import { HiEye, HiEyeOff } from "react-icons/hi";
+import { useDispatch, useSelector } from "react-redux";
+import { setPassword } from "../userSlice";
 
 export const PasswordField = forwardRef<HTMLInputElement, InputProps>(
   (props, ref) => {
+    const dispatch = useDispatch();
     const { isOpen, onToggle } = useDisclosure();
     const inputRef = useRef<HTMLInputElement>(null);
+    const password = useSelector((state: any) => state.user.password);
 
     const mergeRef = useMergeRefs(inputRef, ref);
     const onClickReveal = () => {
@@ -44,6 +48,8 @@ export const PasswordField = forwardRef<HTMLInputElement, InputProps>(
             type={isOpen ? "text" : "password"}
             autoComplete="current-password"
             required
+            value={password}
+            onChange={(e: any) => dispatch(setPassword(e.target.value))}
             {...props}
           />
         </InputGroup>

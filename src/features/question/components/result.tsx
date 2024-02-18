@@ -1,12 +1,15 @@
 import { Button, HStack, Heading, Spacer, Stack, Text } from "@chakra-ui/react";
 import { GoCheckCircleFill, GoXCircleFill } from "react-icons/go";
+import { useNavigate } from "react-router-dom";
 
 const Result = () => {
+  const navigate = useNavigate();
   return (
     <Stack
       textAlign="center"
       minHeight="70vh"
       justifyContent="center"
+      alignItems="center"
       backgroundColor="white"
       paddingY={5}
       paddingX={20}
@@ -28,8 +31,8 @@ const Result = () => {
       </Text>
       <Stack marginTop={3} gap={0}>
         <Text fontWeight="medium">Skor Anda</Text>
-        <Heading as="h2" size="4xl" color="blue.500">
-          50
+        <Heading as="h2" size="4xl" color="green.500">
+          100
         </Heading>
       </Stack>
       <Stack marginTop={3} color="gray.500">
@@ -55,12 +58,19 @@ const Result = () => {
         </HStack>
       </Stack>
 
-      <HStack justifyContent="center" marginTop="8">
+      <HStack justifyContent="center" marginTop="8" width="full">
         <Button rounded="full" colorScheme="blue">
           Play Again
         </Button>
         <Spacer />
-        <Button rounded="full" colorScheme="red">
+        <Button
+          rounded="full"
+          colorScheme="red"
+          onClick={() => {
+            localStorage.setItem("token", "");
+            navigate("login");
+          }}
+        >
           Logout
         </Button>
       </HStack>
