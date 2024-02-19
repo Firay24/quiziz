@@ -6,16 +6,26 @@ import {
   Spacer,
   Stack,
   Text,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 
 import LogoImg from "@/assets/logo.png";
+import Iconmg from "@/assets/icon.png";
 import { Dropdown, MenuProps, Space } from "antd";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { IoPower } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { questionsSelectors } from "../questionSlice";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const isMobile = useBreakpointValue({ base: true, md: false }) ?? false;
+  const allQuestions = useSelector(questionsSelectors.selectAll);
+  const [percent, setPercent] = useState<number>(0);
+  const status = useSelector((state: any) => state.questions.status);
+
   const items: MenuProps["items"] = [
     {
       key: "4",
@@ -28,12 +38,26 @@ const Navbar = () => {
       },
     },
   ];
+
+  useEffect(() => {
+    let answered = 0;
+
+    if (allQuestions) {
+      allQuestions.map((question) => {
+        if (question.user_answer !== "") {
+          answered++;
+        }
+      });
+    }
+
+    setPercent(answered * 20);
+  }, [allQuestions]);
   return (
     <Stack>
       <HStack width="full" paddingY={4} paddingX={"30px"}>
         {/* logo */}
-        <Stack width="15%">
-          <Image src={LogoImg} alt="logo" />
+        <Stack width={{ base: "30%", md: "15%" }}>
+          <Image src={isMobile ? Iconmg : LogoImg} alt="logo" />
         </Stack>
 
         <Spacer />
@@ -61,7 +85,7 @@ const Navbar = () => {
           </Dropdown>
         </HStack>
       </HStack>
-      {/* <Progress value={80} size={"sm"} /> */}
+      {status === "quiz" ? <Progress value={percent} size={"sm"} /> : null}
     </Stack>
   );
 };

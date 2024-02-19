@@ -12,7 +12,7 @@ const PreQuiziz = () => {
         textAlign="center"
         width={"80%"}
       >
-        Selamat Datang di Quiziz
+        Selamat Datang di Quiz
       </Heading>
       <Stack width="70%" textAlign="center">
         <Text fontSize={{ base: "16px", md: "20px" }}>
