@@ -18,11 +18,11 @@ const timerSlice = createSlice({
   reducers: {
     decrementSeconds(state) {
       state.seconds--;
-      localStorage.setItem("timer", (state.seconds--).toString());
+      localStorage.setItem("timer", state.seconds.toString());
     },
     resetTimer(state) {
-      state.seconds = initialState.seconds;
-      localStorage.setItem("timer", initialState.seconds.toString());
+      state.seconds = 180;
+      localStorage.setItem("timer", "20");
     },
   },
 });

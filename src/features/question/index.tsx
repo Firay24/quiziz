@@ -13,6 +13,7 @@ import BgImg from "@/assets/bg.png";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
+import { resetTimer } from "../timer/timerSlice";
 import {
   fetchQuestion,
   questionsSelectors,
@@ -48,6 +49,7 @@ const Questions = () => {
   useEffect(() => {
     if (status === "pre") {
       dispatch(fetchQuestion() as any);
+      dispatch(resetTimer());
 
       // save a question in localstorage "questions"
       const storedQuestions = localStorage.getItem("questions");

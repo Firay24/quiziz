@@ -63,9 +63,9 @@ const Login = () => {
 
         {/* login form */}
         <Box
-          width="35%"
-          py={{ base: "0", sm: "8" }}
-          px={{ base: "4", sm: "10" }}
+          width={{ base: "90%", md: "35%" }}
+          py={{ base: "4", sm: "8" }}
+          px={{ base: "5", sm: "10" }}
           bg={{ base: "transparent", sm: "bg.surface" }}
           boxShadow={{ base: "none", sm: "md" }}
           borderRadius={{ base: "none", sm: "xl" }}

@@ -23,7 +23,6 @@ import { RootState } from "@/app/store";
 
 // components
 import TimerComponent from "@/features/timer";
-import { resetTimer } from "@/features/timer/timerSlice";
 
 const Quiz = ({ question }: { question: any }) => {
   // react function
@@ -33,11 +32,6 @@ const Quiz = ({ question }: { question: any }) => {
   // redux state
   const current = useSelector((state: any) => state.questions.current);
   const seconds = useSelector((state: RootState) => state.timer.seconds);
-
-  // when quiz start, reset timer
-  useEffect(() => {
-    dispatch(resetTimer());
-  }, []);
 
   // when timer is up, quiz is over
   useEffect(() => {
