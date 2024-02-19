@@ -1,4 +1,3 @@
-import shuffleArray from "@/util/shuffleArray";
 import {
   Button,
   Flex,
@@ -14,11 +13,27 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { RiTimeFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrent, setStatus, updateUserAnswer } from "../questionSlice";
+import TimerComponent from "@/features/timer";
+import { useEffect } from "react";
+import { resetTimer } from "@/features/timer/timerSlice";
+import { RootState } from "@/app/store";
 
 const Quiz = ({ question }: { question: any }) => {
   const dispatch = useDispatch();
   const current = useSelector((state: any) => state.questions.current);
   const isMobile = useBreakpointValue({ base: true, md: false }) ?? false;
+  const seconds = useSelector((state: RootState) => state.timer.seconds);
+
+  useEffect(() => {
+    dispatch(resetTimer());
+  }, []);
+
+  useEffect(() => {
+    if (seconds === 0) {
+      dispatch(setStatus("submit"));
+      dispatch(setCurrent(0));
+    }
+  }, [seconds]);
 
   return (
     <Stack paddingX={{ base: 0, md: 20 }} width={{ base: "90%", md: "70%" }}>
@@ -55,7 +70,7 @@ const Quiz = ({ question }: { question: any }) => {
             >
               <RiTimeFill />
             </Stack>
-            <Text color="gray.400">00:00 Min</Text>
+            <TimerComponent />
           </HStack>
         </HStack>
       </Flex>

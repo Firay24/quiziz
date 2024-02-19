@@ -73,13 +73,12 @@ const Questions = () => {
   return (
     <Stack>
       {/* background image */}
-      <Stack position="fixed" zIndex={90} bottom={0}>
+      <Stack position="fixed" zIndex={90} bottom={0} width="full">
         <Image
           src={BgImg}
           alt="image background"
           backgroundSize="cover"
           backgroundRepeat="no-repeat"
-          backgroundPosition="top"
         />
       </Stack>
 
