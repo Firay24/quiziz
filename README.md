@@ -1,6 +1,6 @@
 # Account login
-email: user@mail.com
-password: user123
+- email: user@mail.com
+- password: user123
 
 # React + TypeScript + Vite
 
