@@ -1,18 +1,29 @@
+// library
 import { Button, HStack, Heading, Spacer, Stack, Text } from "@chakra-ui/react";
-import { GoCheckCircleFill, GoXCircleFill } from "react-icons/go";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { questionsSelectors, setStatus } from "../questionSlice";
 import { useEffect, useState } from "react";
 
+// icons
+import { GoCheckCircleFill, GoXCircleFill } from "react-icons/go";
+
+// redux
+import { useDispatch, useSelector } from "react-redux";
+import { questionsSelectors, setStatus } from "../questionSlice";
+
 const Result = () => {
+  // react function
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  // redux state
   const allQuestions = useSelector(questionsSelectors.selectAll);
+
+  // local state
   const [correct, setCorrect] = useState<number>(0);
   const [incorrect, setIncorrect] = useState<number>(0);
   const [answered, setAnswered] = useState<number>(0);
 
+  // calculating the score
   useEffect(() => {
     let correctCount = 0;
     let incorrectCount = 0;

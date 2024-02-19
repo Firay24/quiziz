@@ -1,11 +1,17 @@
+// library style
 import { Button, Heading, Stack, Text } from "@chakra-ui/react";
+
+// redux
 import { useDispatch } from "react-redux";
 import { setStatus } from "../questionSlice";
 
 const PreQuiziz = () => {
+  // redux function
   const dispatch = useDispatch();
+
   return (
     <Stack minHeight="80vh" justifyContent="center" alignItems="center" gap={5}>
+      {/* heading */}
       <Heading
         as="h2"
         size={{ base: "xl", md: "2xl" }}
@@ -14,6 +20,8 @@ const PreQuiziz = () => {
       >
         Selamat Datang di Quiz
       </Heading>
+
+      {/* body */}
       <Stack width="70%" textAlign="center">
         <Text fontSize={{ base: "16px", md: "20px" }}>
           Quiz terdiri dari 5 pertanyaan dengan durasi waktu 2 menit. Apabila

@@ -1,3 +1,4 @@
+// library style
 import {
   Avatar,
   HStack,
@@ -8,24 +9,37 @@ import {
   Text,
   useBreakpointValue,
 } from "@chakra-ui/react";
-
-import LogoImg from "@/assets/logo.png";
-import Iconmg from "@/assets/icon.png";
 import { Dropdown, MenuProps, Space } from "antd";
-import { MdKeyboardArrowDown } from "react-icons/md";
-import { IoPower } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { questionsSelectors } from "../questionSlice";
 import { useEffect, useState } from "react";
 
+// assets
+import LogoImg from "@/assets/logo.png";
+import Iconmg from "@/assets/icon.png";
+
+// icons
+import { MdKeyboardArrowDown } from "react-icons/md";
+import { IoPower } from "react-icons/io5";
+
+// redux
+import { useSelector } from "react-redux";
+import { questionsSelectors } from "../questionSlice";
+
 const Navbar = () => {
+  // react function
   const navigate = useNavigate();
+
+  // ismobile? state
   const isMobile = useBreakpointValue({ base: true, md: false }) ?? false;
+
+  // redux state
   const allQuestions = useSelector(questionsSelectors.selectAll);
-  const [percent, setPercent] = useState<number>(0);
   const status = useSelector((state: any) => state.questions.status);
 
+  // localstate
+  const [percent, setPercent] = useState<number>(0);
+
+  // menu dropdown
   const items: MenuProps["items"] = [
     {
       key: "4",
@@ -39,6 +53,7 @@ const Navbar = () => {
     },
   ];
 
+  // updated a progress percent of answered
   useEffect(() => {
     let answered = 0;
 
@@ -52,6 +67,7 @@ const Navbar = () => {
 
     setPercent(answered * 20);
   }, [allQuestions]);
+
   return (
     <Stack>
       <HStack width="full" paddingY={4} paddingX={"30px"}>
@@ -69,7 +85,8 @@ const Navbar = () => {
             src="https://bit.ly/dan-abramov"
             size={{ base: "sm", md: "md" }}
           />
-          {/* <Text fontWeight="normal">Dan Abrahmov</Text> */}
+
+          {/* dropdown */}
           <Dropdown menu={{ items }}>
             <Text
               onClick={(e) => e.preventDefault()}
@@ -85,6 +102,8 @@ const Navbar = () => {
           </Dropdown>
         </HStack>
       </HStack>
+
+      {/* progress section when start quiz */}
       {status === "quiz" ? <Progress value={percent} size={"sm"} /> : null}
     </Stack>
   );

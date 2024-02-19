@@ -1,11 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const timerFromLocalStorage = localStorage.getItem("timer");
+const timerInitial =
+  timerFromLocalStorage !== null ? parseInt(timerFromLocalStorage) : 180;
+
 interface TimerState {
   seconds: number;
 }
 
 const initialState: TimerState = {
-  seconds: 20,
+  seconds: timerInitial,
 };
 
 const timerSlice = createSlice({
@@ -14,9 +18,11 @@ const timerSlice = createSlice({
   reducers: {
     decrementSeconds(state) {
       state.seconds--;
+      localStorage.setItem("timer", (state.seconds--).toString());
     },
     resetTimer(state) {
       state.seconds = initialState.seconds;
+      localStorage.setItem("timer", initialState.seconds.toString());
     },
   },
 });

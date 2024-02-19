@@ -1,3 +1,4 @@
+// library style
 import {
   Box,
   Button,
@@ -8,18 +9,28 @@ import {
   Input,
   Stack,
 } from "@chakra-ui/react";
-import LogoImg from "@/assets/icon.png";
-import { PasswordField } from "./components/passwordField";
-import { useDispatch, useSelector } from "react-redux";
-import { setEmail } from "./userSlice";
 import { useNavigate } from "react-router-dom";
 
+// assets
+import LogoImg from "@/assets/icon.png";
+
+// component
+import { PasswordField } from "./components/passwordField";
+
+// redux
+import { useDispatch, useSelector } from "react-redux";
+import { setEmail } from "./userSlice";
+
 const Login = () => {
+  // react function
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // redux state
   const email = useSelector((state: any) => state.user.email);
   const password = useSelector((state: any) => state.user.password);
 
+  // handle login button
   const handleLogin = () => {
     if (email === "user@mail.com" && password === "user123") {
       localStorage.setItem("token", "true");
@@ -38,6 +49,7 @@ const Login = () => {
         alignItems="center"
         width="full"
       >
+        {/* heading: logo and title */}
         <Stack spacing="6" alignItems="center">
           <Stack width="50%">
             <Image src={LogoImg} alt="logo" />
@@ -48,6 +60,8 @@ const Login = () => {
             </Heading>
           </Stack>
         </Stack>
+
+        {/* login form */}
         <Box
           width="35%"
           py={{ base: "0", sm: "8" }}

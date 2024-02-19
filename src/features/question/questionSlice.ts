@@ -6,6 +6,10 @@ import {
 } from "@reduxjs/toolkit";
 import shortId from "shortid";
 
+const currentFromLocalStorage = localStorage.getItem("current");
+const currentInitial =
+  currentFromLocalStorage !== null ? parseInt(currentFromLocalStorage) : 0;
+
 export const fetchQuestion = createAsyncThunk("question/fetch", async () => {
   const response = await fetch(
     "https://opentdb.com/api.php?amount=5&type=multiple"
@@ -33,7 +37,7 @@ const questionSlice = createSlice({
   name: "question",
   initialState: questionAdapter.getInitialState({
     loading: false,
-    current: parseInt(localStorage.getItem("current")) || 0,
+    current: currentInitial,
     status: localStorage.getItem("status") || "pre",
   }),
   reducers: {

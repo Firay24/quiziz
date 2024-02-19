@@ -1,28 +1,37 @@
+// library
 import { Image, Stack } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 
+// components
 import Navbar from "./components/navbar";
 import PreQuiziz from "./components/pre";
 import Quiz from "./components/quiz";
 import Result from "./components/result";
 
+// assets
 import BgImg from "@/assets/bg.png";
+
+// redux
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
 import {
   fetchQuestion,
   questionsSelectors,
   setAllQuestions,
-  setStatus,
 } from "./questionSlice";
 
 const Questions = () => {
+  // redux function
   const dispatch = useDispatch();
-  const [question, setQuestion] = useState([]);
+
+  // redux state
   const status = useSelector((state: any) => state.questions.status);
   const allQuestions = useSelector(questionsSelectors.selectAll);
-
   const current = useSelector((state: any) => state.questions.current);
 
+  // local state
+  const [question, setQuestion] = useState([]);
+
+  // when first rendering page, set status, current for question index and isSubmit a quiz
   useEffect(() => {
     if (!localStorage.getItem("status")) {
       localStorage.setItem("status", "pre");
@@ -35,35 +44,28 @@ const Questions = () => {
     }
   }, []);
 
+  // when the user wants to start, get question
   useEffect(() => {
     if (status === "pre") {
-      dispatch(fetchQuestion());
-      if (localStorage.getItem("questions")) {
-        dispatch(
-          setAllQuestions(JSON.parse(localStorage.getItem("questions")))
-        );
+      dispatch(fetchQuestion() as any);
+
+      // save a question in localstorage "questions"
+      const storedQuestions = localStorage.getItem("questions");
+      if (storedQuestions !== null) {
+        dispatch(setAllQuestions(JSON.parse(storedQuestions)));
       }
     }
   }, [status]);
 
+  // get a question redux state from localstorage when user refresh a page
   useEffect(() => {
-    if (localStorage.getItem("status") === "pre") {
-      dispatch(fetchQuestion());
-    }
-  }, [localStorage.getItem("status")]);
-
-  useEffect(() => {
-    if (localStorage.getItem("questions")) {
-      dispatch(setAllQuestions(JSON.parse(localStorage.getItem("questions"))));
+    const storedQuestions = localStorage.getItem("questions");
+    if (storedQuestions !== null) {
+      dispatch(setAllQuestions(JSON.parse(storedQuestions)));
     }
   }, [localStorage.getItem("questions")]);
 
-  useEffect(() => {
-    if (localStorage.getItem("status")) {
-      dispatch(setStatus(localStorage.getItem("status")));
-    }
-  }, [localStorage.getItem("status")]);
-
+  // select questions by index
   useEffect(() => {
     if (allQuestions) {
       setQuestion(allQuestions[current]);

@@ -1,19 +1,24 @@
-import { RootState } from "@/app/store";
+// library
 import { Text } from "@chakra-ui/react";
 import { useEffect } from "react";
+
+// redux
+import { RootState } from "@/app/store";
 import { useDispatch, useSelector } from "react-redux";
-import { decrementSeconds, resetTimer } from "./timerSlice";
+import { decrementSeconds } from "./timerSlice";
 
 const TimerComponent = () => {
+  // redux function
   const dispatch = useDispatch();
+
+  // redux state
   const seconds = useSelector((state: RootState) => state.timer.seconds);
 
+  // setting time per second
   useEffect(() => {
     const timer = setInterval(() => {
       if (seconds > 0) {
         dispatch(decrementSeconds());
-      } else {
-        // dispatch(resetTimer());
       }
     }, 1000);
 

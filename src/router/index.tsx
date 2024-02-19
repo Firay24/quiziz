@@ -1,3 +1,4 @@
+// library
 import {
   Route,
   RouterProvider,
@@ -14,10 +15,8 @@ const AppRouter = () => {
   const router = createBrowserRouter(
     createRoutesFromChildren(
       <>
-        {/* <Route path="/" element={<Questions />} /> */}
         <Route path="/" element={<Checkauth />}>
-          // <Route index element={<Questions />} />
-          //{" "}
+          <Route index element={<Questions />} />
         </Route>
         <Route path="/login" element={<Login />} />
       </>
