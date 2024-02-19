@@ -1,29 +1,37 @@
 import shuffleArray from "@/util/shuffleArray";
 import {
   Button,
+  Flex,
   HStack,
   IconButton,
   Spacer,
   Stack,
   Text,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { FaQuestionCircle } from "react-icons/fa";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { RiTimeFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import { setCurrent, updateUserAnswer } from "../questionSlice";
+import { setCurrent, setStatus, updateUserAnswer } from "../questionSlice";
 
 const Quiz = ({ question }: { question: any }) => {
   const dispatch = useDispatch();
   const current = useSelector((state: any) => state.questions.current);
+  const isMobile = useBreakpointValue({ base: true, md: false }) ?? false;
 
   return (
-    <Stack paddingX={20} width="70%">
+    <Stack paddingX={{ base: 0, md: 20 }} width={{ base: "90%", md: "70%" }}>
       {/* head */}
-      <HStack>
-        <Text fontWeight="semibold" color="gray.400">
-          {`Question ${current + 1}`}
-        </Text>
+      <Flex direction={{ base: "column", md: "row" }}>
+        {!isMobile ? (
+          <Stack>
+            <Text fontWeight="semibold" color="gray.400">
+              {`Question ${current + 1}`}
+            </Text>
+          </Stack>
+        ) : null}
+
         <Spacer />
         <HStack gap={5}>
           <HStack>
@@ -37,6 +45,7 @@ const Quiz = ({ question }: { question: any }) => {
             </Stack>
             <Text color="gray.400">{`${current + 1}/5 Questions`}</Text>
           </HStack>
+          {isMobile ? <Spacer /> : null}
           <HStack>
             <Stack
               padding={1}
@@ -49,12 +58,19 @@ const Quiz = ({ question }: { question: any }) => {
             <Text color="gray.400">00:00 Min</Text>
           </HStack>
         </HStack>
-      </HStack>
+      </Flex>
 
       {/* body */}
       <Stack marginTop={5}>
+        {isMobile ? (
+          <Stack>
+            <Text fontWeight="semibold" color="gray.400">
+              {`Question ${current + 1}`}
+            </Text>
+          </Stack>
+        ) : null}
         <Stack minHeight="55vh">
-          <Text fontSize="2xl" fontWeight="medium">
+          <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="medium">
             {question && question.question}
           </Text>
 
@@ -125,7 +141,14 @@ const Quiz = ({ question }: { question: any }) => {
             />
           </HStack>
           <Spacer />
-          <Button colorScheme="blue" rounded="full">
+          <Button
+            colorScheme="blue"
+            rounded="full"
+            onClick={() => {
+              dispatch(setStatus("submit"));
+              dispatch(setCurrent(0));
+            }}
+          >
             Submit
           </Button>
         </HStack>

@@ -5,6 +5,7 @@ import {
   Progress,
   Spacer,
   Stack,
+  Text,
 } from "@chakra-ui/react";
 
 import LogoImg from "@/assets/logo.png";
@@ -39,15 +40,24 @@ const Navbar = () => {
 
         {/* avatar */}
         <HStack gap={3}>
-          <Avatar name="Dan Abrahmov" src="https://bit.ly/dan-abramov" />
+          <Avatar
+            name="Dan Abrahmov"
+            src="https://bit.ly/dan-abramov"
+            size={{ base: "sm", md: "md" }}
+          />
           {/* <Text fontWeight="normal">Dan Abrahmov</Text> */}
           <Dropdown menu={{ items }}>
-            <a onClick={(e) => e.preventDefault()}>
+            <Text
+              onClick={(e) => e.preventDefault()}
+              cursor="pointer"
+              _hover={{ color: "blue.500" }}
+              fontSize={{ base: "12px", md: "16px" }}
+            >
               <Space>
                 Dan Abrahmov
                 <MdKeyboardArrowDown />
               </Space>
-            </a>
+            </Text>
           </Dropdown>
         </HStack>
       </HStack>

@@ -31,7 +31,11 @@ const questionAdapter = createEntityAdapter({
 
 const questionSlice = createSlice({
   name: "question",
-  initialState: questionAdapter.getInitialState({ loading: false, current: 0 }),
+  initialState: questionAdapter.getInitialState({
+    loading: false,
+    current: parseInt(localStorage.getItem("current")) || 0,
+    status: localStorage.getItem("status") || "pre",
+  }),
   reducers: {
     updateUserAnswer: (state, action) => {
       const { id, user_answer } = action.payload;
@@ -44,8 +48,13 @@ const questionSlice = createSlice({
     },
     setCurrent: (state, action) => {
       state.current = action.payload;
+      localStorage.setItem("current", action.payload.toString());
     },
     setAllQuestions: questionAdapter.setAll,
+    setStatus: (state, action) => {
+      state.status = action.payload;
+      localStorage.setItem("status", action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -71,6 +80,7 @@ export const {
   setCurrent,
   updateAllAnswer,
   setAllQuestions,
+  setStatus,
 } = questionSlice.actions;
 
 export default questionSlice.reducer;

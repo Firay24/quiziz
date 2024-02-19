@@ -1,28 +1,62 @@
 import { Button, HStack, Heading, Spacer, Stack, Text } from "@chakra-ui/react";
 import { GoCheckCircleFill, GoXCircleFill } from "react-icons/go";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { questionsSelectors, setStatus } from "../questionSlice";
+import { useEffect, useState } from "react";
 
 const Result = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const allQuestions = useSelector(questionsSelectors.selectAll);
+  const [correct, setCorrect] = useState<number>(0);
+  const [incorrect, setIncorrect] = useState<number>(0);
+  const [answered, setAnswered] = useState<number>(0);
+
+  useEffect(() => {
+    let correctCount = 0;
+    let incorrectCount = 0;
+    let answeredCount = 0;
+
+    allQuestions.forEach((question: any) => {
+      if (question.user_answer === question.correct_answer) {
+        correctCount++;
+      }
+      if (
+        question.user_answer !== "" &&
+        question.user_answer !== question.correct_answer
+      ) {
+        incorrectCount++;
+      }
+      if (question.user_answer !== "") {
+        answeredCount++;
+      }
+    });
+
+    setCorrect(correctCount);
+    setIncorrect(incorrectCount);
+    setAnswered(answeredCount);
+  }, [allQuestions]);
+
   return (
     <Stack
       textAlign="center"
       minHeight="70vh"
       justifyContent="center"
       alignItems="center"
-      backgroundColor="white"
-      paddingY={5}
-      paddingX={20}
-      boxShadow="md"
+      backgroundColor={{ base: "transparent", md: "white" }}
+      paddingY={{ base: 0, md: 5 }}
+      paddingX={{ base: 0, md: 20 }}
+      boxShadow={{ base: "", md: "md" }}
       rounded="xl"
     >
       <Heading as="h2" size="lg" color="blue.500">
-        Congratulation
+        {correct * 20 >= 80 ? "Congratulation" : "Nice Try"}
       </Heading>
       <Text color="gray.500">
         Kamu menyelesaikan{" "}
         <Text as="span" fontWeight="semibold">
-          5 soal
+          {`${answered} soal`}
         </Text>{" "}
         dari{" "}
         <Text as="span" fontWeight="semibold">
@@ -31,8 +65,12 @@ const Result = () => {
       </Text>
       <Stack marginTop={3} gap={0}>
         <Text fontWeight="medium">Skor Anda</Text>
-        <Heading as="h2" size="4xl" color="green.500">
-          100
+        <Heading
+          as="h2"
+          size="4xl"
+          color={correct * 20 >= 80 ? "green.500" : "red.500"}
+        >
+          {correct * 20}
         </Heading>
       </Stack>
       <Stack marginTop={3} color="gray.500">
@@ -44,7 +82,7 @@ const Result = () => {
             <Text>Jawaban benar</Text>
           </HStack>
           <Spacer />
-          <Text fontWeight="medium">5 soal</Text>
+          <Text fontWeight="medium">{`${correct} soal`}</Text>
         </HStack>
         <HStack>
           <HStack>
@@ -54,12 +92,16 @@ const Result = () => {
             <Text>Jawaban salah</Text>
           </HStack>
           <Spacer />
-          <Text fontWeight="medium">0 soal</Text>
+          <Text fontWeight="medium">{`${incorrect} soal`}</Text>
         </HStack>
       </Stack>
 
       <HStack justifyContent="center" marginTop="8" width="full">
-        <Button rounded="full" colorScheme="blue">
+        <Button
+          rounded="full"
+          colorScheme="blue"
+          onClick={() => dispatch(setStatus("pre"))}
+        >
           Play Again
         </Button>
         <Spacer />

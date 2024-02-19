@@ -55,6 +55,7 @@ const Login = () => {
           bg={{ base: "transparent", sm: "bg.surface" }}
           boxShadow={{ base: "none", sm: "md" }}
           borderRadius={{ base: "none", sm: "xl" }}
+          backgroundColor="white"
         >
           <Stack spacing="6" width="full">
             <Stack spacing="5">
